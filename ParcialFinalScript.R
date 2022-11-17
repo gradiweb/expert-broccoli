@@ -25,7 +25,18 @@ businessDataFrame$NivelDeActivos <- with(businessDataFrame, ifelse(TotalActivos_
                                                                     ifelse(TotalActivos_2018 > 300132265, 2,
                                                                            ifelse(TotalActivos_2018 > 212879841, 3,
                                                                                   ifelse(TotalActivos_2018 > 60003090, 4, 5)))))
-# 1. ¿Cuál es el macrosector con más ingresos operacionales 2018?
+
+# 1. ¿Cuál es el macrosector con más ingresos operacionales 2017?
+profit_2017 <- sqldf('SELECT Macrosector,IngresosOperacionales_2017  
+      FROM businessDataFrame')
+
+mainMacrosectorProfit_2017 <- profit_2017 %>%                                     
+  arrange(desc(IngresosOperacionales_2017)) %>%
+  slice(1:1)
+
+#mainMacrosectorProfit_2017
+
+# 2. ¿Cuál es el macrosector con más ingresos operacionales 2018?
 profit_2018 <- sqldf('SELECT Macrosector,IngresosOperacionales_2018  
       FROM businessDataFrame')
 
@@ -36,16 +47,6 @@ mainMacrosectorProfit_2018 <- profit_2018 %>%
 #mainMacrosectorProfit_2018
 
 
-# 2. ¿Cuál es el macrosector con más ingresos operacionales 2017?
-profit_2017 <- sqldf('SELECT Macrosector,IngresosOperacionales_2017  
-      FROM businessDataFrame')
-
-mainMacrosectorProfit_2017 <- profit_2017 %>%                                     
-  arrange(desc(IngresosOperacionales_2017)) %>%
-  slice(1:1)
-
-#mainMacrosectorProfit_2017
-
 # 3. ¿Cuál es el top de las 10 empresas con más ingresos operacionales en 2018?
 
 bussinessProfit_2018 <- sqldf('SELECT RazonSocial,IngresosOperacionales_2018  
@@ -55,7 +56,7 @@ topTenBusiness_2018 <- bussinessProfit_2018 %>%
   arrange(desc(IngresosOperacionales_2018)) %>%
   slice(1:10)
 
-#topTenBusiness_2018
+topTenBusiness_2018
 
 # 4. Diagrama de pie / sectores - Top 10 empresas con más ingresos operacionales 2018 - %
 
@@ -70,8 +71,8 @@ pie3D(profit, labels = pieProfitpercent_2018,
       col= hcl.colors(length(profit), "Spectral"),
       labelcol = "black",
       labelcex = 0.55)
-      legend("topleft", c(labels),
-       cex = 0.3, fill = rainbow(length(profit)))
+      legend("top", c(labels),
+       cex = 0.2, fill = rainbow(length(profit)))
 
 
 # 5. ¿Ingresos operacionales por región - 2018?
@@ -79,10 +80,12 @@ pie3D(profit, labels = pieProfitpercent_2018,
 regionsProfit_2018 <- sqldf('SELECT Region,IngresosOperacionales_2018  
         FROM businessDataFrame')
 
-profitTablePerRegion_2018 <- regionsProfit_2018 %>% group_by(Region) %>% 
+profitTablePerRegion_2018 <- regionsProfit_2018 %>% 
+        group_by(Region) %>% 
         summarise(Profit = sum(IngresosOperacionales_2018),
             .groups = 'drop')
-#profitTablePerRegion_2018
+
+profitTablePerRegion_2018
 
 # 6 . Barplot ingresos operacionales por región
 
@@ -96,6 +99,7 @@ barplot(profitTablePerRegion_2018$Profit,
            legend.text = c(profitTablePerRegion_2018$Region))
 
 # 7- ¿Cuál fue el promedio de ingresos operacionales para cada Macrosector?
+
 attach(businessDataFrame)
 tapply(IngresosOperacionales_2018, Macrosector, mean,na.rm = TRUE)
 
@@ -105,27 +109,27 @@ round(prop.table(table(Macrosector, Departamento),2),2)
 round(prop.table(table(Macrosector, Region),2),2)
 
 
-# 9 ¿Qué relación existe entre empresas que tienen activos altos y sus Ingresos operacionales?
+# 9 ¿Qué correlación existe entre empresas que tienen activos altos y sus Ingresos operacionales?
 
 plot(NivelDeIngresos, NivelDeActivos, main="Activos VS Ingresos",
      xlab="Nivel de ingresos ", ylab="Nivel de Activos ", pch=20)
-abline(lm(NivelDeActivos~NivelDeIngresos), col="red") # regression line (y~x)
-lines(lowess(NivelDeActivos,NivelDeIngresos), col="blue") # lowess line (x,y)
+abline(lm(NivelDeActivos~NivelDeIngresos), col="red") 
+lines(lowess(NivelDeActivos,NivelDeIngresos), col="blue") 
 
 sunflowerplot(businessDataFrame$NivelDeIngresos,businessDataFrame$NivelDeActivos, 
               col = rgb(0, 0, 0, alpha = 0.05),
               main = "Activos VS Ingresos")
 
 matriz<-select(businessDataFrame,NivelDeIngresos, NivelDeActivos)
-pairs.panels(a, pch=3,main="Matriz de Dispersión, Histograma y Correlación")
+pairs.panels(a, pch=19,main="Activos VS Ingresos - Matriz de Dispersión, Histograma y Correlación")
 
 # 10 ¿Análisis nivel de ingresos 2018?
 summary(NivelDeIngresos)
 
-# 10 ¿Análisis nivel de activos 2018?
+# 11 ¿Análisis nivel de activos 2018?
 summary(NivelDeActivos)
 
-# 11 ¿Cuál es el nivel de ingresos por macrosector?
+# 12 ¿Cuál es el nivel de ingresos por macrosector?
 boxplot(NivelDeIngresos~Macrosector, 
         border=c("#01d564", "#ed1c24"),
         main = "Nivel de ingresos por macrosector",

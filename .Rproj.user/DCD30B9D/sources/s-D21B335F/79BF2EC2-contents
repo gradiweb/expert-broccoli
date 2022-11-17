@@ -1,5 +1,5 @@
 ---
-title: "Report"
+title: "Reporte"
 author: "Miguel Soler"
 date: '2022-11-17'
 output: html_document
@@ -9,22 +9,208 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+# 1000 empresas más grandes del País y sus ingresos durante los periodos 2018 - 2017
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Este es un informe desarrollado a partir de los resultados que logramos dilucidar en la base de datos correspondiente a las 1000 impresas más grandes de Colombia y sus ingresos operacionales durante el 2018. Esta base de datos fue extraída [desde datos abiertos Colombia](https://www.datos.gov.co/).
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+## Variables 
+A continuación presento una descripción de cada variable y su tipo de dato:
 
-```{r cars}
-summary(cars)
+Nombre de la columna | Descripción | Tipo
+-------------------- | ----------- | ------ |
+Numero | Consecutivo de empresas | numeric
+Nit | Numero de identificación Tributaria de las sociedades | numeric
+RazonSocial | Nombre de la sociedad | character
+Supervisor  | Empresa que ejerce supervisión | character
+Region | Región Geográfica en que se ubica la sociedad | character
+Departamento | Departamento de domicilio de la sociedad | character
+Ciudad | Ciudad de domicilio de la sociedad | character
+CIIU | Clasificación Industrial Internacional Uniforme | character
+Macrosector | Sector al que pertenece la sociedad | character
+IngresosOperacionales_2018 | Ingresos operacionales registradas por la sociedad año 2018 | numeric
+GananciaPerdida_2018 | Ganancias registradas por la sociedad año 2018 | numeric
+TotalActivos_2018 | Total activos registrados por la sociedad año 2018 | numeric
+TotalPasivos_2018 | Total Pasivos registrados por la sociedad año 2018 | numeric
+TotalPatrimonio_2018 | Total Patrimonio registrados por la sociedad año 2018 | numeric
+IngresosOperacionales_2017 | Ingresos operacionales registradas por la sociedad año 2017 | numeric
+GananciaPerdida_2017 | Ganancias registradas por la sociedad año 2017 | numeric
+TotalActivos_2017 | Total activos registrados por la sociedad año 2017 | numeric
+TotalPasivos_2017 | Total Pasivos registrados por la sociedad año 2017 | numeric
+TotalPatrimonio_2017 | Total Patrimonio registrados por la sociedad año 2017 | numeric
+GrupoNIIF | Clasificación de grupo contable de la sociedad | character
+NivelDeIngresos | Categoría de ingresos de la sociedad (ver tabla de correspondencias) | numeric
+NivelDeActivos | Categoría de ingresos de la sociedad (ver tabla de correspondencias) | numeric
+
+### Tabla de correspondencias - Nivel de ingresos
+
+Nivel | Descripción | Tipo
+-------------------- | ----------- | ------ |
+1 | Sociedades que declaran un valor de ingresos > 1.001.508.387 | numeric
+2 | Sociedades que declaran un valor de ingresos > 334.184.383 | numeric
+3 | Sociedades que declaran un valor de ingresos > 230.046.500 | numeric
+4 | Sociedades que declaran un valor de ingresos > 150.258.106 | numeric
+5 | Sociedades que declaran un valor de ingresos < 150.258.106 | numeric
+
+
+### Tabla de correspondencias - Nivel de activos
+
+Nivel | Descripción | Tipo
+-------------------- | ----------- | ------ |
+1 | Sociedades que declaran un valor de activos > 1.001.095.239 | numeric
+2 | Sociedades que declaran un valor de activos > 300.132.265 | numeric
+3 | Sociedades que declaran un valor de activos > 212.879.841 | numeric
+4 | Sociedades que declaran un valor de activos > 60.003.090 | numeric
+5 | Sociedades que declaran un valor de activos < 60.003.090 | numeric
+
+### Niveles  VS valores
+
+Valor | Nivel 
+-------------------- | ----------- 
+1 | Alto
+2 | Alto
+3 | Medio
+4 | Medio
+5 | Bajo
+
+## Reporte de información relevante
+
+
+
+
+### ¿Cuál es el macrosector con más ingresos operacionales 2017?
+
+Como podemos visualizar en la instrucción ejecutada desde la línea 29 a la 37 (script r), el macrosector con más ingresos reportados para el 2017 fue el sector Minero-Hidrocarburos. Si extrapolamos un poco más a detalle este importante dato, podemos ver su relevancia en factores preponderantes como el PIB en Colombia y la importancia del sector como tal si revisamos bases de datos con la misma información para los años 2018 - 2019 - 2020 - 2021.
+Esto claramente nos muestra la dependencia que Colombia tiene aún de dicho sector y la importancia de empezar a diversificar un poco más la economía, teniendo en cuenta que estamos hablando de la explotación de recursos no renovables
+
+Macrosector | IngresosOperacionales_2017
+-------------------- | ----------- | 
+MINERO-HIDROCARBUROS  | 49687082000
+
+
+
+
+### ¿Cuál es el macrosector con más ingresos operacionales 2018?
+
+Como lo mencionamos en el anterior reporte, la importancia del sector de hidrocarburos se destaca y muestra una importante alza en los ingresos para el 2018 con respecto al año 2017
+
+Macrosector | IngresosOperacionales_2018
+-------------------- | ----------- | 
+MINERO-HIDROCARBUROS  | 62579849000
+
+### ¿Cuál es el top de las 10 empresas con más ingresos operacionales en 2018?
+
+RazonSocial | IngresosOperacionales_2018
+-------------------- | ----------- | 
+ECOPETROL S.A | 62579849000
+ORGANIZACIÓN TERPEL S.A. | 14879440281
+REFINERIA DE CARTAGENA S.A.S. | 12919431000
+ALMACENES EXITO S A | 11444486000
+EMPRESAS PÚBLICAS DE MEDELLÍN ESP | 8966811000
+AEROVIAS DEL CONTINENTE AMERICANO S.A. - AVIANCA S.A. | 8747168806
+COMUNICACIÓN CELULAR S.A. | 8665791456
+NUEVA EPS S.A.  | 7014036646
+Cenit Transporte y Logística de Hidrocarburos S.A.S. | 6715702915
+SUPERTIENDAS Y DROGUERIAS OLIMPICA S.A | 6158207111
+
+En el **top 10 de las empresas** podemos dar un poco más de énfasis a nuestra anterior interpretación, donde las empresas que trabajan directamente en el sector minero e hidrocarburos son las que más altos ingreso operacionales tuvieron durante el año 2018, seguidas muy de cerca por empresas de servicios de telefonía móvil, grandes superficies y supermercados, empresas de servicios públicos y de transporte aéreo.
+
+
+Para ver un poco más a detalle podemos visualizar el siguiente diagrama de sectores / pie.
+
+```{r}
+knitr::include_graphics("img/piechart.png")
 ```
 
-## Including Plots
+*_Podemos ver un poco más a detalle, como la industria de minería e hidrocarburos tiene más de un 60% de las ganancias reportadas por el top 10 de las empresas más importantes de Colombia._*
 
-You can also embed plots, for example:
+### ¿Ingresos operacionales por región - 2018?
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+  Region            |         Profit
+--------------------| ----------- | 
+Antioquia           |   99101360461
+Bogotá - Cundinamarca | 430751591817
+Centro - Oriente    |   8785504538
+Costa Atlántica     |   73087367658
+Costa Pacífica      |   57620144338
+Eje Cafetero        |   8844918933 
+7 Otros             |   1734073531
+
+```{r}
+knitr::include_graphics("img/barplot.png")
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+*_Si bien en cifras, teniendo en cuenta que hablamos en billones de pesos (COP), podría resultar un poco complejo leer e intepretrar la información, si analizamos los datos a través de nuestra gráfica podemos entender de manera simple que el motor de la economía en Colombia, está centralizado en 4 regiones principales, Bogotá / Cundinamarca, Antioquia, Costa Atlántica y la Costa pacifica._*
+
+
+### ¿Cuál fue el promedio de ingresos operacionales para cada Macrosector?
+
+El 2018 fue un año de Economía realmente activa y aunque como lo hemos visto a lo largo de este informe, el sector de Hidrocarburos es el que más tiene relevancia, otros sectores como el comercio y los servicios tienen un promedio de ingresos que supera los 500.000.000 Millones de Pesos, aportando un importantísimo valor el PIB de Colombia
+
+Sector | Promedio de Ingresos
+--------------------| ----------- | 
+AGROPECUARIO  | 329040888
+COMERCIO | 640878673
+CONSTRUCCIÓN | 299777501
+MANUFACTURA | 518967771
+MINERO-HIDROCARBUROS | 2114711056
+SERVICIOS | 771736005
+
+### ¿Cuál es el porcentaje que aporta cada macrosector a los ingresos operacionales en cada Departamento y región?
+
+En la línea 108 y 109 (script r), podemos encontrar un importante indicador, que nos permite conocer la relevancia que tiene cada macrosector en los departamentos más importantes de Colombia. Podemos observar de manera clara que Departamentos como Antioquia, Atlántico, Bogotá, tienen economías muy diversificadas, con ingresos importantes no solo en Hidrocarburos, también en comercio, construcción, manufactura, entre otros. 
+Podemos visualizar como Departamentos como Sucre, son altamente dependientes del Comercio, al igual que Tolima, donde el Comercio representa un 50% de sus ingresos anuales. San Andres y providencia también muestra una alta dependencia del comercio, claramente tomando en consideración que sus ingresos son en su mayoría por el turismo. *_Algo importante a que considero revisando la base de datos, es que el turismo debería tener una categoría macroeconomica, teniendo en cuenta que también es uno de los motores principales del país._* Esta categoría está un poco implícita en los servicios y el comercio en esta base de datos. 
+
+
+### # 9 ¿Qué correlación existe entre empresas que tienen activos altos y sus Ingresos operacionales?
+
+Para abordar esta pregunta realizamos tres diagramas, los cuales procedo a explicar
+
+```{r}
+knitr::include_graphics("img/relación_activos_ingresos_1.png")
+```
+
+_*Tenemos un plot básico, donde trazamos dos líneas, para la línea más importante es la roja, que nos permite simular un modelo de regresión lineal para aproximar un poco más la relación de dependencia entre las dos variables*_
+
+
+```{r}
+knitr::include_graphics("img/relación_activos_ingresos_2.png")
+```
+
+_*Teniendo en cuenta que en el primer plot, tenemos un alto traslapamiento de información, usamos el sunflowerplot, para tener una visualización más clara de los datos traslapados.*_
+
+```{r}
+knitr::include_graphics("img/relación_activos_ingresos_3.png")
+```
+
+_*Finalmente, nuestra matriz de dispersión nos permite llegar a la conclusión de la pregunta.
+Un nivel de ingresos alto, tiene correlación positiva con un nivel de activos alto y esto hace mucho sentido. Mientas más activos y recursos tenga una compañía mayor presupuesto para investigación y desarrollo, mejores instalaciones (menos gastos en arrendamiento de inmuebles), mejores condiciones para sus trabajadores y por otro lado entre más ingresos operacionales y ganacias, las empresas podrán tener más activos. En suma activos altos permiten una mejora en los ingresos operacionales y altos ingresos operacionales permiten la compra de más activos.*_
+_*Esto podría parece una correlación obvia, pero no tanto, si analizamos un poco los casos de empresas de tecnología por ejemplo, muchas de ellas trabajan con equipos 100% remotos y no tienen activos, pero si una alta facturación e ingresos, no obstante quedamos con la duda metodica porque es claro que esta correlación puede ser más debil y tender a ser negativa si analizamos la información después de la pandemia.*_
+
+
+### # 10 ¿Análisis nivel de ingresos  2018?
+
+Min.| 1st Qu. | Median | Mean| 3rd Qu.| Max. 
+------|------|------|------|------|------|
+1.000 | 2.000 | 3.000 | 2.985 | 4.000 | 5.000 
+  
+### # 11 ¿Análisis nivel de activos  2018?
+
+Min.| 1st Qu. | Median | Mean| 3rd Qu.| Max. 
+------|------|------|------|------|------|
+1.000 |  2.000 | 3.000 | 2.964 | 4.000 | 5.000
+
+_*Lo que podemos analizar de las principales medidas descriptivas, teniendo en cuenta que los activos y los ingresos se miden de 1 - 5 es muy poco, tal vez la medida que nos aporta más información es la media, donde podemos discernir que la mayoria de empresas tiene ingresos / activos de nivel medio-alto posicionándose entre el nivel 2 - 3 (Ver tabla Niveles  VS valores). 
+No obstante es un interesante dato a tener en cuenta,  teniendo en cuenta que la muestra son las 1000 empresas con mayor facturación, si tomaramos una muestra mayor, teniendo mucho más en cuenta las pymes, estoy seguro que este promedio podría verse afectado considerablemente.*_
+
+
+### ¿Cuál es el nivel de ingresos por macrosector?
+
+Una de las formas más eficientes que tenemos para responder este tipo de preguntas, es a través de un boxplot. 
+
+```{r}
+knitr::include_graphics("img/boxplot.png")
+```
+
+
+*_Las empresas de construcción aun no tienen ingresos que permitan su posicionamiento en los niveles 1 - 2 (ingresos altos) y es el macrosector que esta un poco más cerca de tener empresas catalogadas como (ingresos bajos). Por otro lado empresas como las mineras y de hidrocarburos, muestran una vez más su preponderancia, posicionandose en el nivel 1 de ingresos (Alto) , lejos de los ingresos bajos y con una gran taza de compañias en los ingresos Medios._*
+*_Sectores como el agropecuario, comercio, manufactura y servicios, se encuentran entre el nivel 2 - 3 (medio - alto), un poco más lejos que la construcción de tener ingresos bajos y mostrando su gran empuje en el PIB de la mano del sector energetico, el cual durante todo este informe se mostro como el sector macroeconomico más relevante. _*
